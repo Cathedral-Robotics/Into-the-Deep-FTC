@@ -21,10 +21,13 @@ public class MecanumTeleOp extends LinearOpMode {
     boolean pGA2up = false;
 
     boolean pGA1up = false;
+    double baseSpeed = 2;
+    double slideSpeed= 0.4;
+
 
     String status = "pickup";
 
-
+    public Servo claw;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,22 +37,28 @@ public class MecanumTeleOp extends LinearOpMode {
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
-
+        DcMotor base = hardwareMap.dcMotor.get("base");
         DcMotor slides = hardwareMap.dcMotor.get("slides");
-        DcMotor intake = hardwareMap.dcMotor.get("intake");
 
-
+        claw = hardwareMap.get(Servo.class,"claw");
 
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        claw.setPosition(.9);
         slides.setTargetPosition(0);
         slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        int ArmTarget = 0;
+        int ArmTarget=0;
+
+        base.setTargetPosition(0);
+        base.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        base.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        int BaseHeight = 0;
+        
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -81,34 +90,108 @@ public class MecanumTeleOp extends LinearOpMode {
             frontRight.setPower(frontRightPower);
             backRight.setPower(backRightPower);
 
+        if (gamepad2.dpad_up) {
+            BaseHeight= 350;
+            baseSpeed=1;
+            slideSpeed=0.4;
+        }
+
+        if (gamepad2.dpad_down) {
+            BaseHeight = 70;
+            baseSpeed=0.2;
+            slideSpeed=0.4;
+        }
+
+
+
+        if (gamepad2.left_bumper  ) {
+            claw.setPosition(0.5    );
+        }
+
+        if (gamepad2.right_bumper) {
+            claw.setPosition(0.9);
+        }
+
+
+
+            if (gamepad2.b){
+                BaseHeight=1400;
+                ArmTarget=1850;
+                baseSpeed = 2;
+                slideSpeed=0.4;
+            }
+
+
+            if (gamepad2.a){
+               BaseHeight=0;
+                ArmTarget=0;
+                baseSpeed = 2;
+                slideSpeed=0.4;
+            }
+
+            if (gamepad2.y){
+                BaseHeight=1500;
+                ArmTarget=2870;
+                baseSpeed = baseSpeed-1.3;
+                slideSpeed=0.4;
+            }
+
+            if (gamepad2.x)  {
+                ArmTarget=700;
+                slideSpeed=slideSpeed+0.2;
+
+            }
+
+
+            if (gamepad2.dpad_right) {
+                ArmTarget=1600;
+                slideSpeed=0.4;
+            }
+
+            if (gamepad2.dpad_left) {
+                ArmTarget=0;
+                slideSpeed=0.4;
+            }
+            if (gamepad1.dpad_up) {
+                BaseHeight=900;
+                ArmTarget=2500;
+                slideSpeed=0.4;
+            }
+            if (gamepad1.dpad_down) {
+                BaseHeight=900;
+                ArmTarget=0;
+                slideSpeed=0.4;
+            }
+
+
+
+            //Hanging
             /*
-            if (gamepad2.left_trigger >.5 ) {
-                intake.setPower(1);
+            if (gamepad1.dpad_up) {
+                BaseHeight=BaseHeight+300;
             }
-            if (gamepad2.right_trigger >.5 ) {
-                intake.setPower(-1);
+            if (gamepad1.dpad_down) {
+                BaseHeight=BaseHeight-300;
             }
 
-            if (gamepad2.left_trigger <.5  && gamepad2.right_trigger <.5) {
-                intake.setPower(0);
-            }
-**/
 
+            double righttrigger = gamepad1.right_trigger;
+            double lefttrigger = gamepad1.left_trigger;
+
+            slides.setPower(righttrigger-lefttrigger);
+    */
+
+
+
+            telemetry.addData("Lift Position", slides.getCurrentPosition());
+            telemetry.addData("Base Position", base.getCurrentPosition());
+
+            slides.setTargetPosition(-ArmTarget);
+            slides.setPower(slideSpeed);
+            base.setTargetPosition(BaseHeight);
+            base.setPower(baseSpeed);
 
 //code for manual override adjustments for lift
-
-            boolean ga2y = gamepad2.y;
-            boolean ga1y = gamepad1.y;
-
-            boolean ga2a = gamepad2.a;
-            boolean ga1a = gamepad1.a;
-
-
-            boolean ga2down = gamepad2.dpad_down;
-            boolean ga1down = gamepad1.dpad_down;
-
-            boolean ga1up = gamepad1.dpad_up;
-            boolean ga2up = gamepad2.dpad_up;
 
 
 //up down fine tune controller 2
