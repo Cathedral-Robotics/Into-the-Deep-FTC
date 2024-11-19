@@ -342,7 +342,7 @@ This is a bug fix only release to address the following four issues.
     * Slow `OpMode`s can no longer increase the amount of time it takes to process network commands, and vice versa.
     * The `init()`, `init_loop()`, `start()` and `loop()` methods no longer need to return within a certain time frame.
 * BNO055 IMU legacy driver: restores the ability to initialize in one OpMode, and then have another OpMode re-use that
-  initialization. This allows you to maintain the 0-yaw position between OpModes, if desired.
+  initialization~. This allows you to maintain the 0-yaw position between OpModes, if desired.
 * Allows customized versions of device drivers in the FTC SDK to use the same XML tag.
   * Before, if you wanted to customize a device driver, you had to copy it to a new class _and_ give
     it a new XML tag. Giving it a new XML tag meant that to switch which driver was being used, you
