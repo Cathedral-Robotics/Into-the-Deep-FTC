@@ -45,7 +45,7 @@ public class MecanumTeleOp extends LinearOpMode {
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
-
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         claw.setPosition(.9);
@@ -152,6 +152,10 @@ public class MecanumTeleOp extends LinearOpMode {
                 ArmTarget=0;
                 slideSpeed=0.4;
             }
+
+
+
+
             if (gamepad1.dpad_up) {
                 BaseHeight=900;
                 ArmTarget=2500;
@@ -161,6 +165,14 @@ public class MecanumTeleOp extends LinearOpMode {
                 BaseHeight=900;
                 ArmTarget=0;
                 slideSpeed=0.4;
+            }
+            if (gamepad1.right_bumper) {
+                BaseHeight=1200;
+                ArmTarget= 2300;
+            }
+            if (gamepad1.left_bumper) {
+                BaseHeight=1200;
+                ArmTarget=0;
             }
 
 
